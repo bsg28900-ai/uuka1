@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_f752f6e3301254dd67b5b644275a4822 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+[hidden] { display: none !important; }
+button { font-family: inherit; }
+
+#toss-layout {
+    display: flex; flex-direction: column;
+    width: 100%; height: 100vh; height: 100dvh;
+}
+
+/* ---------- 상단 패널 ---------- */
+#toss-header-panel {
+    position: relative; z-index: 2000;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 12px 16px 10px; box-sizing: border-box;
+    background: #ffffff; border-bottom: 1px solid #e5e8eb;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.toss-search-box {
+    width: 100%; max-width: 600px; box-sizing: border-box;
+    background: #f2f4f6; border-radius: 14px; padding: 10px 14px;
+}
+.toss-search-box input {
+    width: 100%; border: none; outline: none; background: transparent;
+    font-family: inherit; font-size: 14px; font-weight: 500; color: #191f28;
+}
+.toss-search-box input::placeholder { color: #8b95a1; }
+
+.toss-filter-row { width: 100%; display: flex; justify-content: center; }
+.toss-filter-bar {
+    display: flex; gap: 6px; max-width: 100%;
+    overflow-x: auto; scrollbar-width: none; padding: 2px 0;
+}
+.toss-filter-bar::-webkit-scrollbar { display: none; }
+
+.toss-dropdown { position: relative; flex: 0 0 auto; }
+
+.toss-btn {
+    display: flex; align-items: center; gap: 6px;
+    height: 34px; padding: 0 12px; box-sizing: border-box; flex: 0 0 auto;
+    background: #ffffff; border: 1px solid #d1d6db; border-radius: 12px;
+    font-size: 13px; font-weight: 600; color: #333d4b;
+    white-space: nowrap; cursor: pointer; transition: background .15s, border-color .15s, color .15s;
+}
+.toss-btn::after {
+    content: ""; width: 6px; height: 6px; margin-top: -3px;
+    border-right: 1.6px solid currentColor; border-bottom: 1.6px solid currentColor;
+    transform: rotate(45deg); opacity: .6;
+}
+.toss-btn.no-caret::after { display: none; }
+.toss-btn .dot { width: 8px; height: 8px; border-radius: 50%; }
+.toss-btn:hover { background: #f9fafb; border-color: #b0b8c1; }
+.toss-btn:focus-visible { outline: 2px solid #3182f6; outline-offset: 2px; }
+.toss-btn.is-set { background: #e8f3ff; border-color: #e8f3ff; color: #3182f6; }
+.toss-dropdown.open .toss-btn { border-color: #3182f6; color: #3182f6; background: #e8f3ff; }
+.toss-btn:disabled { opacity: .45; cursor: not-allowed; background: #ffffff; border-color: #d1d6db; color: #333d4b; }
+
+/* 메뉴는 fixed로 띄워서 필터 바가 가로 스크롤돼도 잘리지 않게 함 (좌표는 JS가 계산) */
+.toss-menu {
+    display: none; position: fixed; z-index: 1;
+    min-width: 140px; max-height: min(300px, 50vh); overflow-y: auto; box-sizing: border-box;
+    padding: 6px; background: #ffffff; border: 1px solid #e5e8eb; border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+.toss-dropdown.open .toss-menu { display: block; }
+
+.toss-option {
+    display: block; width: 100%; padding: 9px 12px; box-sizing: border-box;
+    background: none; border: 0; border-radius: 8px; text-align: left;
+    font-size: 13px; font-weight: 500; color: #4e5968;
+    white-space: nowrap; cursor: pointer;
+}
+.toss-option:hover { background: #f2f4f6; color: #191f28; }
+.toss-option:focus-visible { outline: 2px solid #3182f6; outline-offset: -2px; }
+.toss-option.active { background: #e8f3ff; color: #3182f6; font-weight: 700; }
+
+/* 기간 슬라이더 */
+.pm { width: 240px; padding: 8px 10px 4px; }
+.pm-row { display: flex; justify-content: space-between; margin-top: 6px; font-size: 12px; color: #6b7684; }
+.pm-row b { color: #191f28; font-weight: 700; }
+.pm input[type=range] { width: 100%; margin: 6px 0 10px; accent-color: #3182f6; }
+
+.toss-status {
+    width: 100%; max-width: 600px; min-height: 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    font-size: 12px; color: #8b95a1;
+}
+#result-count { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.status-actions { display: flex; align-items: center; gap: 12px; flex: 0 0 auto; }
+.link-btn { padding: 0; background: none; border: 0; cursor: pointer; font-size: 12px; font-weight: 600; color: #3182f6; }
+.link-btn:focus-visible { outline: 2px solid #3182f6; outline-offset: 2px; border-radius: 4px; }
+.link-btn[aria-pressed="true"] { color: #1b64da; text-decoration: underline; }
+
+/* ---------- 지도 ---------- */
+#toss-map-container { position: relative; flex: 1 1 auto; min-height: 0; width: 100%; }
+.folium-map { width: 100%; height: 100%; }
+.leaflet-container { font-family: inherit; }
+
+/* 마커: 논조 비율을 파이로, 기사 수를 숫자와 크기로 표현 */
+.toss-dot-wrap { background: none; border: none; }
+.toss-pin {
+    display: grid; place-items: center; box-sizing: border-box;
+    border: 3px solid #ffffff; border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+    transition: box-shadow .15s;
+}
+.toss-pin b {
+    display: grid; place-items: center; width: 58%; height: 58%; border-radius: 50%;
+    background: #ffffff; color: #191f28; font-size: 11px; font-weight: 800; line-height: 1;
+}
+.toss-pin.is-active { box-shadow: 0 0 0 4px rgba(49, 130, 246, 0.45), 0 2px 8px rgba(0, 0, 0, 0.28); }
+.toss-pin--base { background: #191f28; }
+
+/* 한국어 지명 라벨 (라벨 없는 타일 위에 직접 그림) */
+.kr-label { background: none; border: none; pointer-events: none; }
+.kr-label span {
+    position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); white-space: nowrap;
+    font-size: 12px; font-weight: 600; letter-spacing: -0.01em; color: #6b7684;
+    text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 2px #fff, 0 0 2px #fff;
+}
+.kr-n span { font-size: 15px; font-weight: 800; letter-spacing: 0.2em; color: #9aa3ad; }
+.kr-o span { font-size: 12px; font-weight: 600; letter-spacing: 0.3em; color: #7f9db9; }
+.kr-t span { font-size: 11px; font-weight: 700; color: #4e5968; }
+.kr-label.is-data span { color: #191f28; font-weight: 800; }
+
+/* ---------- 시트 (모바일: 바텀시트 / 데스크톱: 우측 패널) ---------- */
+#sheet {
+    position: absolute; z-index: 1200; left: 0; right: 0; bottom: 0;
+    display: flex; flex-direction: column; box-sizing: border-box;
+    max-height: 56%; background: #ffffff; border-radius: 20px 20px 0 0;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.14);
+    animation: sheet-in .22s ease-out;
+}
+#sheet.is-expanded { max-height: 90%; }
+.sheet-handle {
+    flex: 0 0 auto; width: 100%; height: 22px; padding: 0; background: none; border: 0; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}
+.sheet-handle::before { content: ""; width: 36px; height: 4px; border-radius: 2px; background: #d1d6db; }
+.sheet-head { flex: 0 0 auto; display: flex; align-items: flex-start; gap: 8px; padding: 4px 12px 8px 20px; }
+.sheet-titles { flex: 1 1 auto; min-width: 0; }
+#sheet-title { font-size: 18px; font-weight: 800; color: #191f28; }
+#sheet-sub { margin-top: 2px; font-size: 13px; color: #6b7684; }
+.sheet-icon {
+    flex: 0 0 auto; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%;
+    background: #f2f4f6; color: #4e5968; font-size: 15px; cursor: pointer;
+}
+.sheet-icon:hover { background: #e5e8eb; }
+.sheet-icon:focus-visible { outline: 2px solid #3182f6; outline-offset: 2px; }
+.tone-bar { flex: 0 0 auto; padding: 0 20px 10px; }
+.tone-bar .bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; background: #f2f4f6; }
+.tone-bar .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 12px; color: #4e5968; }
+.tone-bar .legend i { display: inline-block; width: 8px; height: 8px; margin-right: 4px; border-radius: 50%; }
+#sheet-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; border-top: 1px solid #f2f4f6; overscroll-behavior: contain; }
+
+.tc { padding: 14px 20px; border-bottom: 1px solid #f2f4f6; }
+.tc.is-link { cursor: pointer; }
+.tc.is-link:hover { background: #f9fafb; }
+.tc.is-link:focus-visible { outline: 2px solid #3182f6; outline-offset: -2px; }
+.tc.is-hi { background: #f2f8ff; }
+.tc-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 12px; color: #8b95a1; }
+.tc-tone { padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+.tc-route { color: #4e5968; font-weight: 600; }
+.tc-title { font-size: 15px; font-weight: 700; line-height: 1.45; color: #191f28; word-break: keep-all; }
+.tc-cn { margin-top: 3px; font-size: 12px; line-height: 1.4; color: #6b7684; word-break: keep-all; }
+.tc-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+.tc-link { display: inline-block; font-size: 12px; font-weight: 600; color: #3182f6; text-decoration: none; }
+.tc-link:hover { text-decoration: underline; }
+.sheet-empty { padding: 32px 20px; text-align: center; font-size: 13px; color: #8b95a1; }
+
+@keyframes sheet-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+@media (min-width: 721px) {
+    #sheet {
+        left: auto; top: 12px; right: 12px; bottom: 34px; width: 360px; max-height: none;
+        border-radius: 20px; box-shadow: 0 10px 32px rgba(0, 0, 0, 0.16);
+    }
+    .sheet-handle { display: none; }
+    .sheet-head { padding-top: 16px; }
+    @keyframes sheet-in { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+}
+
+/* 빈 결과 / 토스트 */
+#empty-state { position: absolute; inset: 0; z-index: 1100; display: grid; place-items: center; pointer-events: none; }
+.empty-card {
+    pointer-events: auto; max-width: 260px; padding: 20px 24px; text-align: center;
+    background: #ffffff; border-radius: 18px; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+}
+.empty-card p { margin: 0 0 12px; font-size: 14px; font-weight: 700; line-height: 1.5; color: #333d4b; }
+.empty-card .cta {
+    height: 36px; padding: 0 16px; border: 0; border-radius: 10px; cursor: pointer;
+    background: #3182f6; color: #ffffff; font-size: 13px; font-weight: 700;
+}
+#toast {
+    position: absolute; z-index: 1300; left: 50%; bottom: 40px; transform: translateX(-50%);
+    padding: 10px 16px; border-radius: 12px; background: rgba(25, 31, 40, 0.92);
+    color: #ffffff; font-size: 13px; font-weight: 600; white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #sheet { animation: none; }
+    .toss-pin, .toss-btn { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="toss-layout">
+    <div id="toss-header-panel">
+        <div class="toss-search-box">
+            <input type="search" id="search-input" placeholder="국가, 단체 또는 제목 검색" autocomplete="off" />
+        </div>
+        <div class="toss-filter-row">
+            <div class="toss-filter-bar" id="toss-filter-bar"></div>
+        </div>
+        <div class="toss-status">
+            <span id="result-count" role="status" aria-live="polite">불러오는 중…</span>
+            <span class="status-actions">
+                <button type="button" id="list-btn" class="link-btn" aria-pressed="false">목록 보기</button>
+                <button type="button" id="copy-btn" class="link-btn">링크 복사</button>
+                <button type="button" id="reset-btn" class="link-btn" hidden>초기화</button>
+            </span>
+        </div>
+    </div>
+    <div id="toss-map-container">
+
+    
+    
+            <div class="folium-map" id="map_f752f6e3301254dd67b5b644275a4822" ></div>
+        
+
+<section id="sheet" role="dialog" aria-label="사설 목록" hidden>
+    <button type="button" id="sheet-handle" class="sheet-handle" aria-label="시트 크기 조절"></button>
+    <div class="sheet-head">
+        <button type="button" id="sheet-back" class="sheet-icon" aria-label="목록으로 돌아가기" hidden>&#8249;</button>
+        <div class="sheet-titles">
+            <div id="sheet-title"></div>
+            <div id="sheet-sub"></div>
+        </div>
+        <button type="button" id="sheet-close" class="sheet-icon" aria-label="닫기">&#10005;</button>
+    </div>
+    <div id="sheet-tones" class="tone-bar"></div>
+    <div id="sheet-body"></div>
+</section>
+<div id="empty-state" hidden>
+    <div class="empty-card">
+        <p id="empty-msg">조건에 맞는 사설이 없어요</p>
+        <button type="button" id="empty-reset" class="cta">필터 초기화</button>
+    </div>
+</div>
+<div id="toast" role="status" hidden></div>
+</div>
+</div>
+<script>
+(function () {
+    'use strict';
+    var CONFIG = {"mapName": "map_f752f6e3301254dd67b5b644275a4822", "beijing": [39.9042, 116.4074], "center": [30.0, 100.0], "zoom": 3, "dataUrl": "articles.json", "refreshMinutes": 5};
+    var LOCATIONS = {"한국": {"lat": 37.5665, "lon": 126.978, "continent": "아시아", "category": "국가"}, "중국": {"lat": 39.9042, "lon": 116.4074, "continent": "아시아", "category": "국가"}, "일본": {"lat": 35.6762, "lon": 139.6503, "continent": "아시아", "category": "국가"}, "인도": {"lat": 20.5937, "lon": 78.9629, "continent": "아시아", "category": "국가"}, "인도네시아": {"lat": -0.7893, "lon": 113.9213, "continent": "아시아", "category": "국가"}, "베트남": {"lat": 14.0583, "lon": 108.2772, "continent": "아시아", "category": "국가"}, "필리핀": {"lat": 12.8797, "lon": 121.774, "continent": "아시아", "category": "국가"}, "미국": {"lat": 38.9072, "lon": -77.0369, "continent": "북아메리카", "category": "국가"}, "캐나다": {"lat": 56.1304, "lon": -106.3468, "continent": "북아메리카", "category": "국가"}, "영국": {"lat": 51.5074, "lon": -0.1278, "continent": "유럽", "category": "국가"}, "유럽": {"lat": 50.8503, "lon": 4.3517, "continent": "유럽", "category": "국가"}, "러시아": {"lat": 55.7558, "lon": 37.6173, "continent": "유럽", "category": "국가"}, "UN": {"lat": 40.7489, "lon": -73.968, "continent": "기타", "category": "단체"}, "EU": {"lat": 50.8503, "lon": 4.3517, "continent": "기타", "category": "단체"}, "NATO": {"lat": 50.879, "lon": 4.4258, "continent": "기타", "category": "단체"}, "ASEAN": {"lat": -6.2088, "lon": 106.8456, "continent": "기타", "category": "단체"}, "BRICS": {"lat": -25.7479, "lon": 28.2293, "continent": "기타", "category": "단체"}, "G7": {"lat": 48.8566, "lon": 2.3522, "continent": "기타", "category": "단체"}};
+    var SNAPSHOT = [];
+    var KR_LABELS = [{"n": "아시아", "la": 47, "lo": 90, "k": "n", "p": 0}, {"n": "유럽", "la": 53, "lo": 18, "k": "n", "p": 0}, {"n": "아프리카", "la": 5, "lo": 20, "k": "n", "p": 0}, {"n": "북아메리카", "la": 48, "lo": -100, "k": "n", "p": 0}, {"n": "남아메리카", "la": -15, "lo": -60, "k": "n", "p": 0}, {"n": "오세아니아", "la": -24, "lo": 135, "k": "n", "p": 0}, {"n": "태평양", "la": 15, "lo": 168, "k": "o", "p": 0}, {"n": "태평양", "la": -8, "lo": -130, "k": "o", "p": 0}, {"n": "북대서양", "la": 33, "lo": -42, "k": "o", "p": 0}, {"n": "남대서양", "la": -22, "lo": -15, "k": "o", "p": 0}, {"n": "인도양", "la": -14, "lo": 80, "k": "o", "p": 0}, {"n": "러시아", "la": 61, "lo": 95, "k": "c", "p": 1}, {"n": "캐나다", "la": 58, "lo": -105, "k": "c", "p": 1}, {"n": "미국", "la": 39.5, "lo": -98, "k": "c", "p": 1}, {"n": "중국", "la": 35.5, "lo": 103.5, "k": "c", "p": 1}, {"n": "브라질", "la": -10.5, "lo": -52, "k": "c", "p": 1}, {"n": "호주", "la": -25.5, "lo": 134, "k": "c", "p": 1}, {"n": "인도", "la": 22.5, "lo": 79, "k": "c", "p": 1}, {"n": "아르헨티나", "la": -35.5, "lo": -65, "k": "c", "p": 1}, {"n": "카자흐스탄", "la": 48, "lo": 67, "k": "c", "p": 1}, {"n": "알제리", "la": 28, "lo": 2.6, "k": "c", "p": 1}, {"n": "콩고민주공화국", "la": -3, "lo": 23.5, "k": "c", "p": 1}, {"n": "사우디아라비아", "la": 24, "lo": 45, "k": "c", "p": 1}, {"n": "멕시코", "la": 24, "lo": -102, "k": "c", "p": 1}, {"n": "인도네시아", "la": -1.5, "lo": 113, "k": "c", "p": 1}, {"n": "수단", "la": 16, "lo": 30, "k": "c", "p": 1}, {"n": "리비아", "la": 27, "lo": 17.5, "k": "c", "p": 1}, {"n": "이란", "la": 32.5, "lo": 54, "k": "c", "p": 1}, {"n": "몽골", "la": 46.5, "lo": 103, "k": "c", "p": 1}, {"n": "페루", "la": -9.5, "lo": -75, "k": "c", "p": 1}, {"n": "차드", "la": 15.5, "lo": 18.5, "k": "c", "p": 1}, {"n": "니제르", "la": 17, "lo": 9, "k": "c", "p": 1}, {"n": "앙골라", "la": -12, "lo": 17.5, "k": "c", "p": 1}, {"n": "말리", "la": 17.5, "lo": -3, "k": "c", "p": 1}, {"n": "남아프리카공화국", "la": -29, "lo": 24.5, "k": "c", "p": 1}, {"n": "콜롬비아", "la": 4, "lo": -73, "k": "c", "p": 1}, {"n": "에티오피아", "la": 8.6, "lo": 39.5, "k": "c", "p": 1}, {"n": "이집트", "la": 26.5, "lo": 29.8, "k": "c", "p": 1}, {"n": "탄자니아", "la": -6.3, "lo": 34.8, "k": "c", "p": 1}, {"n": "나이지리아", "la": 9.5, "lo": 8.1, "k": "c", "p": 1}, {"n": "일본", "la": 36.5, "lo": 138, "k": "c", "p": 2}, {"n": "한국", "la": 36.3, "lo": 127.9, "k": "c", "p": 2}, {"n": "북한", "la": 40.1, "lo": 127.3, "k": "c", "p": 2}, {"n": "프랑스", "la": 46.6, "lo": 2.5, "k": "c", "p": 2}, {"n": "스페인", "la": 40, "lo": -3.7, "k": "c", "p": 2}, {"n": "독일", "la": 51, "lo": 10.4, "k": "c", "p": 2}, {"n": "영국", "la": 54, "lo": -2.5, "k": "c", "p": 2}, {"n": "이탈리아", "la": 42.8, "lo": 12.5, "k": "c", "p": 2}, {"n": "우크라이나", "la": 49, "lo": 31.5, "k": "c", "p": 2}, {"n": "스웨덴", "la": 62.5, "lo": 16, "k": "c", "p": 2}, {"n": "노르웨이", "la": 64.5, "lo": 12, "k": "c", "p": 2}, {"n": "핀란드", "la": 64.5, "lo": 26.5, "k": "c", "p": 2}, {"n": "폴란드", "la": 52, "lo": 19.4, "k": "c", "p": 2}, {"n": "태국", "la": 15, "lo": 101, "k": "c", "p": 2}, {"n": "베트남", "la": 15, "lo": 107.5, "k": "c", "p": 2}, {"n": "필리핀", "la": 12.5, "lo": 122.5, "k": "c", "p": 2}, {"n": "미얀마", "la": 21, "lo": 96, "k": "c", "p": 2}, {"n": "파키스탄", "la": 30, "lo": 69.5, "k": "c", "p": 2}, {"n": "튀르키예", "la": 39, "lo": 35, "k": "c", "p": 2}, {"n": "아프가니스탄", "la": 33.9, "lo": 66, "k": "c", "p": 2}, {"n": "이라크", "la": 33, "lo": 43.7, "k": "c", "p": 2}, {"n": "우즈베키스탄", "la": 41.5, "lo": 64, "k": "c", "p": 2}, {"n": "칠레", "la": -30, "lo": -70.8, "k": "c", "p": 2}, {"n": "볼리비아", "la": -16.7, "lo": -64.7, "k": "c", "p": 2}, {"n": "베네수엘라", "la": 7.2, "lo": -66, "k": "c", "p": 2}, {"n": "모로코", "la": 31.8, "lo": -6.5, "k": "c", "p": 2}, {"n": "모리타니", "la": 20.5, "lo": -10.5, "k": "c", "p": 2}, {"n": "케냐", "la": 0.5, "lo": 37.8, "k": "c", "p": 2}, {"n": "소말리아", "la": 5, "lo": 46, "k": "c", "p": 2}, {"n": "남수단", "la": 7.5, "lo": 30.5, "k": "c", "p": 2}, {"n": "중앙아프리카공화국", "la": 6.5, "lo": 20.5, "k": "c", "p": 2}, {"n": "카메룬", "la": 5.7, "lo": 12.5, "k": "c", "p": 2}, {"n": "잠비아", "la": -14, "lo": 27.5, "k": "c", "p": 2}, {"n": "모잠비크", "la": -17.5, "lo": 35.5, "k": "c", "p": 2}, {"n": "마다가스카르", "la": -19.5, "lo": 46.7, "k": "c", "p": 2}, {"n": "나미비아", "la": -22, "lo": 17.5, "k": "c", "p": 2}, {"n": "파푸아뉴기니", "la": -6.5, "lo": 145, "k": "c", "p": 2}, {"n": "뉴질랜드", "la": -43, "lo": 171.5, "k": "c", "p": 2}, {"n": "그린란드", "la": 74, "lo": -41, "k": "c", "p": 2}, {"n": "말레이시아", "la": 3.8, "lo": 102, "k": "c", "p": 3}, {"n": "방글라데시", "la": 23.8, "lo": 90.3, "k": "c", "p": 3}, {"n": "네팔", "la": 28.3, "lo": 84, "k": "c", "p": 3}, {"n": "스리랑카", "la": 7.8, "lo": 80.7, "k": "c", "p": 3}, {"n": "시리아", "la": 35, "lo": 38.5, "k": "c", "p": 3}, {"n": "요르단", "la": 31, "lo": 36.5, "k": "c", "p": 3}, {"n": "레바논", "la": 33.9, "lo": 35.9, "k": "c", "p": 3}, {"n": "예멘", "la": 15.6, "lo": 47.6, "k": "c", "p": 3}, {"n": "오만", "la": 21, "lo": 57, "k": "c", "p": 3}, {"n": "아랍에미리트", "la": 23.8, "lo": 54.3, "k": "c", "p": 3}, {"n": "쿠웨이트", "la": 29.3, "lo": 47.6, "k": "c", "p": 3}, {"n": "투르크메니스탄", "la": 39, "lo": 59, "k": "c", "p": 3}, {"n": "키르기스스탄", "la": 41.5, "lo": 74.5, "k": "c", "p": 3}, {"n": "타지키스탄", "la": 38.8, "lo": 71, "k": "c", "p": 3}, {"n": "아제르바이잔", "la": 40.3, "lo": 47.7, "k": "c", "p": 3}, {"n": "조지아", "la": 42.2, "lo": 43.5, "k": "c", "p": 3}, {"n": "아르메니아", "la": 40.2, "lo": 44.9, "k": "c", "p": 3}, {"n": "캄보디아", "la": 12.7, "lo": 104.9, "k": "c", "p": 3}, {"n": "라오스", "la": 19.5, "lo": 102.5, "k": "c", "p": 3}, {"n": "대만", "la": 23.7, "lo": 121, "k": "c", "p": 3}, {"n": "부탄", "la": 27.4, "lo": 90.4, "k": "c", "p": 3}, {"n": "아일랜드", "la": 53.2, "lo": -8, "k": "c", "p": 3}, {"n": "포르투갈", "la": 39.6, "lo": -8, "k": "c", "p": 3}, {"n": "벨라루스", "la": 53.6, "lo": 28, "k": "c", "p": 3}, {"n": "루마니아", "la": 45.9, "lo": 25, "k": "c", "p": 3}, {"n": "아이슬란드", "la": 64.9, "lo": -18.5, "k": "c", "p": 3}, {"n": "그리스", "la": 39.2, "lo": 22.5, "k": "c", "p": 3}, {"n": "네덜란드", "la": 52.2, "lo": 5.5, "k": "c", "p": 3}, {"n": "벨기에", "la": 50.6, "lo": 4.6, "k": "c", "p": 3}, {"n": "스위스", "la": 46.8, "lo": 8.2, "k": "c", "p": 3}, {"n": "오스트리아", "la": 47.5, "lo": 14.5, "k": "c", "p": 3}, {"n": "체코", "la": 49.8, "lo": 15.5, "k": "c", "p": 3}, {"n": "헝가리", "la": 47.2, "lo": 19.4, "k": "c", "p": 3}, {"n": "불가리아", "la": 42.7, "lo": 25.3, "k": "c", "p": 3}, {"n": "세르비아", "la": 44, "lo": 20.8, "k": "c", "p": 3}, {"n": "크로아티아", "la": 45.2, "lo": 15.5, "k": "c", "p": 3}, {"n": "덴마크", "la": 56, "lo": 9.5, "k": "c", "p": 3}, {"n": "슬로바키아", "la": 48.7, "lo": 19.5, "k": "c", "p": 3}, {"n": "리투아니아", "la": 55.3, "lo": 23.9, "k": "c", "p": 3}, {"n": "라트비아", "la": 56.9, "lo": 24.9, "k": "c", "p": 3}, {"n": "가봉", "la": -0.7, "lo": 11.8, "k": "c", "p": 3}, {"n": "콩고", "la": -0.8, "lo": 15.2, "k": "c", "p": 3}, {"n": "보츠와나", "la": -22, "lo": 23.7, "k": "c", "p": 3}, {"n": "짐바브웨", "la": -19, "lo": 29.8, "k": "c", "p": 3}, {"n": "말라위", "la": -13.2, "lo": 34.3, "k": "c", "p": 3}, {"n": "우간다", "la": 1.3, "lo": 32.5, "k": "c", "p": 3}, {"n": "가나", "la": 7.9, "lo": -1.1, "k": "c", "p": 3}, {"n": "코트디부아르", "la": 7.6, "lo": -5.5, "k": "c", "p": 3}, {"n": "세네갈", "la": 14.5, "lo": -14.5, "k": "c", "p": 3}, {"n": "기니", "la": 10.9, "lo": -10.9, "k": "c", "p": 3}, {"n": "부르키나파소", "la": 12.3, "lo": -1.6, "k": "c", "p": 3}, {"n": "베냉", "la": 9.5, "lo": 2.3, "k": "c", "p": 3}, {"n": "튀니지", "la": 34, "lo": 9.5, "k": "c", "p": 3}, {"n": "에리트레아", "la": 15.4, "lo": 38.8, "k": "c", "p": 3}, {"n": "에콰도르", "la": -1.4, "lo": -78.4, "k": "c", "p": 3}, {"n": "파라과이", "la": -23.3, "lo": -58.4, "k": "c", "p": 3}, {"n": "우루과이", "la": -32.8, "lo": -56, "k": "c", "p": 3}, {"n": "쿠바", "la": 21.6, "lo": -79.3, "k": "c", "p": 3}, {"n": "과테말라", "la": 15.6, "lo": -90.3, "k": "c", "p": 3}, {"n": "온두라스", "la": 14.8, "lo": -86.6, "k": "c", "p": 3}, {"n": "니카라과", "la": 12.9, "lo": -85, "k": "c", "p": 3}, {"n": "카타르", "la": 25.3, "lo": 51.2, "k": "c", "p": 4}, {"n": "싱가포르", "la": 1.35, "lo": 103.8, "k": "c", "p": 4}, {"n": "동티모르", "la": -8.8, "lo": 125.7, "k": "c", "p": 4}, {"n": "에스토니아", "la": 58.7, "lo": 25.5, "k": "c", "p": 4}, {"n": "몰도바", "la": 47.2, "lo": 28.5, "k": "c", "p": 4}, {"n": "알바니아", "la": 41.1, "lo": 20, "k": "c", "p": 4}, {"n": "북마케도니아", "la": 41.6, "lo": 21.7, "k": "c", "p": 4}, {"n": "보스니아", "la": 44, "lo": 17.8, "k": "c", "p": 4}, {"n": "슬로베니아", "la": 46.1, "lo": 14.8, "k": "c", "p": 4}, {"n": "몬테네그로", "la": 42.7, "lo": 19.3, "k": "c", "p": 4}, {"n": "키프로스", "la": 35, "lo": 33, "k": "c", "p": 4}, {"n": "시에라리온", "la": 8.5, "lo": -11.8, "k": "c", "p": 4}, {"n": "라이베리아", "la": 6.4, "lo": -9.4, "k": "c", "p": 4}, {"n": "가이아나", "la": 4.8, "lo": -58.9, "k": "c", "p": 4}, {"n": "수리남", "la": 4, "lo": -56, "k": "c", "p": 4}, {"n": "코스타리카", "la": 9.9, "lo": -84.2, "k": "c", "p": 4}, {"n": "파나마", "la": 8.5, "lo": -80.1, "k": "c", "p": 4}, {"n": "도미니카공화국", "la": 18.9, "lo": -70.5, "k": "c", "p": 4}, {"n": "아이티", "la": 19, "lo": -72.7, "k": "c", "p": 4}, {"n": "자메이카", "la": 18.1, "lo": -77.3, "k": "c", "p": 4}, {"n": "피지", "la": -17.7, "lo": 178, "k": "c", "p": 4}, {"n": "솔로몬제도", "la": -9, "lo": 160, "k": "c", "p": 4}, {"n": "바누아투", "la": -16, "lo": 167, "k": "c", "p": 4}, {"n": "이스라엘", "la": 31.05, "lo": 34.85, "k": "c", "p": 4}, {"n": "팔레스타인", "la": 31.95, "lo": 35.3, "k": "c", "p": 4}, {"n": "베이징", "la": 39.9042, "lo": 116.4074, "k": "t", "p": 1, "dy": 18}];
+
+    var ALL = '전체';
+    var TONES = ['긍정', '중립', '부정'];
+    var TONE_STYLE = {
+        '긍정': { c: '#28a745', bg: '#e7f6ea' },
+        '중립': { c: '#ff9800', bg: '#fff3e0' },
+        '부정': { c: '#dc3545', bg: '#fdeaec' }
+    };
+    var OTHER = { c: '#8b95a1', bg: '#f2f4f6' };
+    var BEIJING = CONFIG.beijing;
+
+    var state = { tones: [], from: '', to: '', category: ALL, target: ALL, q: '' };
+    var DATA = [];          // 정규화된 기사 (날짜 내림차순)
+    var MONTHS = [];        // 데이터가 걸친 'YYYY-MM' 목록
+    var skipped = [];       // 위치 미등록으로 제외된 대상
+    var groups = {};        // target -> { idxs, vis, marker, line, layer, active }
+    var visible = [];       // 필터 통과한 DATA 인덱스
+    var visSet = {};
+    var sheet = { mode: null, target: null, fromList: false, highlight: -1 };
+    var openKey = null;
+    var downInside = false;
+    var lastScroll = 0;
+    var dataSig = null;
+    var map = null;
+    var beijingMarker = null;
+    var toastTimer = null;
+
+    function $(id) { return document.getElementById(id); }
+    var searchInput = $('search-input'), filterBar = $('toss-filter-bar'), countEl = $('result-count');
+    var resetBtn = $('reset-btn'), listBtn = $('list-btn'), copyBtn = $('copy-btn');
+
+    function esc(s) {
+        return String(s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+    function debounce(fn, ms) {
+        var t = null;
+        return function () { clearTimeout(t); t = setTimeout(fn, ms); };
+    }
+    function ymLabel(ym) { return ym.replace('-', '.'); }
+    function toneStyle(t) { return TONE_STYLE[t] || OTHER; }
+
+    // ---------------------------------------------------------
+    // 데이터 읽기 / 정리
+    // ---------------------------------------------------------
+    function parseCSV(text) {
+        var rows = [], row = [], cell = '', q = false, i, ch;
+        text = text.replace(/^\uFEFF/, '');
+        for (i = 0; i < text.length; i++) {
+            ch = text[i];
+            if (q) {
+                if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; }
+                else cell += ch;
+            } else if (ch === '"') q = true;
+            else if (ch === ',') { row.push(cell); cell = ''; }
+            else if (ch === '\n' || ch === '\r') {
+                if (ch === '\r' && text[i + 1] === '\n') i++;
+                row.push(cell); cell = '';
+                if (row.length > 1 || row[0] !== '') rows.push(row);
+                row = [];
+            } else cell += ch;
+        }
+        if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+        if (!rows.length) return [];
+        var head = rows[0].map(function (h) { return h.trim(); });
+        return rows.slice(1).map(function (r) {
+            var o = {};
+            head.forEach(function (h, j) { o[h] = r[j] === undefined ? '' : r[j]; });
+            return o;
+        });
+    }
+
+    function parsePayload(text) {
+        var t = text.replace(/^\uFEFF/, '').trim();
+        if (t.charAt(0) === '[' || t.charAt(0) === '{') {
+            var j = JSON.parse(t);
+            return Array.isArray(j) ? j : (j.articles || j.data || []);
+        }
+        return parseCSV(t);
+    }
+
+    function parseDateParts(raw) {   // 날짜를 어떤 형식으로 적든 최대한 연/월을 뽑아냄
+        var s = String(raw || '').trim().replace(/[T ]\d{1,2}:\d{2}(:\d{2})?$/, '');
+        var nums = s.match(/\d+/g);
+        if (!nums || !nums.length) return { y: '', m: '' };
+        var y = '', m = '';
+        if (nums[0].length === 4) { y = nums[0]; m = nums[1] || ''; }
+        else if (nums[0].length === 2) { y = (parseInt(nums[0], 10) <= 79 ? '20' : '19') + nums[0]; m = nums[1] || ''; }
+        else if (nums[0].length === 8) { y = nums[0].slice(0, 4); m = nums[0].slice(4, 6); }
+        else if (nums[0].length === 6) { y = (parseInt(nums[0].slice(0, 2), 10) <= 79 ? '20' : '19') + nums[0].slice(0, 2); m = nums[0].slice(2, 4); }
+        var mi = parseInt(m, 10);
+        if (!m || mi < 1 || mi > 12) return { y: '', m: '' };
+        return { y: y, m: ('0' + mi).slice(-2) };
+    }
+
+    function normalizeAll(list) {
+        var out = [], miss = {};
+        list.forEach(function (rec) {
+            var target = String(rec.target || '').trim();
+            var loc = LOCATIONS[target];
+            if (!loc) { if (target) miss[target] = 1; return; }
+            var date = String(rec.date || '').trim();
+            var dp = parseDateParts(date);
+            var url = String(rec.url || rec.link || '').trim();
+            var blogUrl = String(rec.blog_url || rec.blogUrl || rec.blog || '').trim();
+            out.push({
+                target: target, category: loc.category, continent: loc.continent, lat: loc.lat, lon: loc.lon,
+                tone: String(rec.tone || '').trim(),
+                year: dp.y, month: dp.m,
+                ym: dp.y && dp.m ? dp.y + '-' + dp.m : '',
+                date: date,
+                title_kr: String(rec.title_kr || ''), title_cn: String(rec.title_cn || ''),
+                url: /^https?:\/\//i.test(url) ? url : '',
+                blog_url: /^https?:\/\//i.test(blogUrl) ? blogUrl : ''
+            });
+        });
+        out.sort(function (a, b) { return b.ym.localeCompare(a.ym) || b.date.localeCompare(a.date); });
+        skipped = Object.keys(miss);
+        if (skipped.length && window.console) console.warn('위치 미등록 대상(지도에서 제외):', skipped.join(', '));
+        return out;
+    }
+
+    function computeMonths() {
+        MONTHS = [];
+        var yms = DATA.map(function (d) { return d.ym; }).filter(Boolean).sort();
+        if (!yms.length) return;
+        var s = yms[0].split('-').map(Number), e = yms[yms.length - 1].split('-').map(Number);
+        var y = s[0], m = s[1];
+        while ((y < e[0] || (y === e[0] && m <= e[1])) && MONTHS.length < 240) {
+            MONTHS.push(y + '-' + ('0' + m).slice(-2));
+            m++; if (m > 12) { m = 1; y++; }
+        }
+    }
+
+    function presetFor(cat) {
+        var present = {}, out = [];
+        DATA.forEach(function (d) { present[d.target] = d; });
+        Object.keys(LOCATIONS).forEach(function (name) {
+            if (!present[name]) return;
+            var loc = LOCATIONS[name];
+            var v = cat === '대륙' ? loc.continent : (loc.category === cat ? name : null);
+            if (v && out.indexOf(v) === -1) out.push(v);
+        });
+        return out;
+    }
+
+    // 주소(해시)에서 넘어온 값이 지금 데이터와 안 맞으면 정리
+    function sanitizeState() {
+        if (state.from && MONTHS.indexOf(state.from) === -1) state.from = '';
+        if (state.to && MONTHS.indexOf(state.to) === -1) state.to = '';
+        if (state.category !== ALL && ['대륙', '국가', '단체'].indexOf(state.category) === -1) state.category = ALL;
+        if (state.category === ALL) state.target = ALL;
+        else if (state.target !== ALL && presetFor(state.category).indexOf(state.target) === -1) state.target = ALL;
+    }
+
+    function setData(list) {
+        var normalized = normalizeAll(list);
+        var sig = JSON.stringify(normalized);
+        if (sig === dataSig) return false;
+        dataSig = sig;
+        DATA = normalized;
+        computeMonths();
+        sanitizeState();
+        buildGroups();
+        if (map) buildLayers();
+        render();
+        applyFilters({ keepSheet: true });
+        if (map && labelEntries.length) { refreshLabelStyles(); layoutLabels(); }   // 데이터가 바뀌면 진하게 표시할 나라도 갱신
+        return true;
+    }
+
+    function fetchRemote(isRefresh) {
+        if (!CONFIG.dataUrl) return;
+        var url = CONFIG.dataUrl + (CONFIG.dataUrl.indexOf('?') > -1 ? '&' : '?') + '_=' + Date.now();
+        fetch(url, { cache: 'no-store' })
+            .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+            .then(function (text) { setData(parsePayload(text)); })
+            .catch(function (err) {
+                if (window.console) console.warn('데이터를 새로 읽지 못해 내장 데이터를 사용합니다:', err && err.message);
+            });
+    }
+
+    // ---------------------------------------------------------
+    // 필터 판정
+    // ---------------------------------------------------------
+    function matches(item) {
+        var kw = state.q.trim().toLowerCase();
+        if (kw && (item.target + ' ' + item.title_kr + ' ' + item.title_cn).toLowerCase().indexOf(kw) === -1) return false;
+        if (state.tones.length && state.tones.indexOf(item.tone) === -1) return false;
+        if (state.from || state.to) {
+            if (!item.ym) return false;
+            if (state.from && item.ym < state.from) return false;
+            if (state.to && item.ym > state.to) return false;
+        }
+        if (state.category !== ALL && state.category !== '대륙' && item.category !== state.category) return false;
+        if (state.target !== ALL) {
+            if (state.category === '대륙') { if (item.continent !== state.target) return false; }
+            else if (item.target !== state.target) return false;
+        }
+        return true;
+    }
+
+    function isFiltered() {
+        return !!state.q.trim() || state.tones.length > 0 || !!state.from || !!state.to ||
+               state.category !== ALL || state.target !== ALL;
+    }
+
+    // ---------------------------------------------------------
+    // 필터 UI (칩 + 드롭다운)
+    // ---------------------------------------------------------
+    function periodLabel() {
+        if (!state.from && !state.to) return '기간';
+        var a = state.from || MONTHS[0], b = state.to || MONTHS[MONTHS.length - 1];
+        return a === b ? ymLabel(a) : ymLabel(a) + ' – ' + ymLabel(b);
+    }
+
+    function makeChip(text, cls) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'toss-btn' + (cls ? ' ' + cls : '');
+        b.textContent = text;
+        return b;
+    }
+
+    function render() {
+        var keepScroll = filterBar.scrollLeft;
+        filterBar.innerHTML = '';
+
+        // 논조: 범례를 겸한 다중 선택 칩 (아무것도 안 켜면 전체)
+        TONES.forEach(function (t) {
+            var on = state.tones.indexOf(t) > -1;
+            var chip = makeChip('', 'no-caret' + (on ? ' is-set' : ''));
+            chip.innerHTML = '<i class="dot" style="background:' + TONE_STYLE[t].c + '"></i>' + esc(t);
+            chip.setAttribute('aria-pressed', on ? 'true' : 'false');
+            chip.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var k = state.tones.indexOf(t);
+                if (k > -1) state.tones.splice(k, 1); else state.tones.push(t);
+                openKey = null;
+                render();
+                applyFilters({ fit: true });
+            });
+            filterBar.appendChild(chip);
+        });
+
+        // 기간: 시작/끝 월 슬라이더
+        addDropdown('period', periodLabel(), !!(state.from || state.to), MONTHS.length < 2, function (menu, btn) {
+            var n = MONTHS.length;
+            if (n < 2) return;
+            var a = state.from ? MONTHS.indexOf(state.from) : 0;
+            var b = state.to ? MONTHS.indexOf(state.to) : n - 1;
+            var wrap = document.createElement('div');
+            wrap.className = 'pm';
+            wrap.innerHTML =
+                '<div class="pm-row"><span>시작</span><b id="pm-from-l"></b></div>' +
+                '<input type="range" id="pm-from" min="0" max="' + (n - 1) + '" value="' + a + '" aria-label="기간 시작">' +
+                '<div class="pm-row"><span>끝</span><b id="pm-to-l"></b></div>' +
+                '<input type="range" id="pm-to" min="0" max="' + (n - 1) + '" value="' + b + '" aria-label="기간 끝">';
+            menu.appendChild(wrap);
+            var fromEl = wrap.querySelector('#pm-from'), toEl = wrap.querySelector('#pm-to');
+            var fromL = wrap.querySelector('#pm-from-l'), toL = wrap.querySelector('#pm-to-l');
+            function labels() { fromL.textContent = ymLabel(MONTHS[+fromEl.value]); toL.textContent = ymLabel(MONTHS[+toEl.value]); }
+            function onInput(which) {
+                var x = +fromEl.value, y = +toEl.value;
+                if (which === 'from' && x > y) { y = x; toEl.value = y; }
+                if (which === 'to' && y < x) { x = y; fromEl.value = x; }
+                state.from = x === 0 ? '' : MONTHS[x];
+                state.to = y === n - 1 ? '' : MONTHS[y];
+                labels();
+                btn.textContent = periodLabel();
+                btn.classList.toggle('is-set', !!(state.from || state.to));
+                applyFilters({ fit: true });
+            }
+            fromEl.addEventListener('input', function () { onInput('from'); });
+            toEl.addEventListener('input', function () { onInput('to'); });
+            labels();
+        });
+
+        // 구분 / 세부 선택
+        addListDropdown('category', '구분', [['대륙', '대륙별'], ['국가', '국가별'], ['단체', '단체/기구별']]);
+        var targetOpts = presetFor(state.category).map(function (v) { return [v, v]; });
+        addListDropdown('target', '세부 선택', targetOpts, state.category === ALL ? '먼저 구분을 선택해 주세요' : '');
+
+        filterBar.scrollLeft = keepScroll;   // 다시 그려도 가로 스크롤 위치 유지
+        lastScroll = filterBar.scrollLeft;
+    }
+
+    function addDropdown(key, label, isSet, disabled, buildMenu) {
+        var dd = document.createElement('div');
+        dd.className = 'toss-dropdown' + (openKey === key ? ' open' : '');
+        var btn = makeChip(label, isSet ? 'is-set' : '');
+        btn.setAttribute('aria-haspopup', 'true');
+        btn.setAttribute('aria-expanded', openKey === key ? 'true' : 'false');
+        if (disabled) btn.disabled = true;
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            openKey = (openKey === key) ? null : key;
+            render();
+        });
+        dd.appendChild(btn);
+        var menu = document.createElement('div');
+        menu.className = 'toss-menu';
+        buildMenu(menu, btn);
+        dd.appendChild(menu);
+        filterBar.appendChild(dd);
+        if (openKey === key) positionMenu(btn, menu);
+    }
+
+    function addListDropdown(key, title, opts, disabledHint) {
+        var selected = state[key];
+        var hit = opts.filter(function (o) { return o[0] === selected; })[0];
+        var label = (selected !== ALL && hit) ? hit[1] : title;
+        addDropdown(key, label, selected !== ALL, opts.length === 0, function (menu, btn) {
+            if (disabledHint) btn.title = disabledHint;
+            menu.setAttribute('role', 'listbox');
+            [[ALL, '전체']].concat(opts).forEach(function (o) {
+                var opt = document.createElement('button');
+                opt.type = 'button';
+                opt.className = 'toss-option' + (selected === o[0] ? ' active' : '');
+                opt.setAttribute('role', 'option');
+                opt.textContent = o[1];
+                opt.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    state[key] = o[0];
+                    if (key === 'category') state.target = ALL;   // 구분이 바뀌면 세부 선택 초기화
+                    openKey = null;
+                    render();
+                    applyFilters({ fit: true });
+                });
+                menu.appendChild(opt);
+            });
+        });
+    }
+
+    function positionMenu(btn, menu) {
+        var r = btn.getBoundingClientRect();
+        var w = menu.offsetWidth;
+        menu.style.left = Math.max(8, Math.min(r.left, window.innerWidth - w - 8)) + 'px';
+        menu.style.top = (r.bottom + 6) + 'px';
+    }
+
+    function closeMenu() {
+        if (openKey !== null) { openKey = null; render(); }
+    }
+
+    // ---------------------------------------------------------
+    // 지도: 마커(대상별 1개) / 곡선 연결선
+    // ---------------------------------------------------------
+    function findMap() {
+        var byName = window[CONFIG.mapName];
+        if (byName && typeof L !== 'undefined' && byName instanceof L.Map) return byName;
+        var keys = Object.keys(window);
+        for (var i = 0; i < keys.length; i++) {
+            try { if (window[keys[i]] instanceof L.Map) return window[keys[i]]; } catch (e) {}
+        }
+        return null;
+    }
+
+    // 베이징→대상을 위로 살짝 휘는 곡선으로 (2차 베지어)
+    function arc(a, b) {
+        var dLat = b[0] - a[0], dLon = b[1] - a[1];
+        var dist = Math.sqrt(dLat * dLat + dLon * dLon);
+        if (dist < 0.5) return null;
+        var cLat = Math.min((a[0] + b[0]) / 2 + Math.min(dist * 0.28, 28), 82);
+        var cLon = (a[1] + b[1]) / 2;
+        var pts = [], i, t, u;
+        for (i = 0; i <= 40; i++) {
+            t = i / 40; u = 1 - t;
+            pts.push([u * u * a[0] + 2 * u * t * cLat + t * t * b[0], u * u * a[1] + 2 * u * t * cLon + t * t * b[1]]);
+        }
+        return pts;
+    }
+
+    function toneCounts(g) {
+        var c = {};
+        g.vis.forEach(function (i) { var t = DATA[i].tone; c[t] = (c[t] || 0) + 1; });
+        return c;
+    }
+
+    function dominantColor(counts, total) {
+        var best = null, bestN = 0, tie = false;
+        Object.keys(counts).forEach(function (t) {
+            if (counts[t] > bestN) { best = t; bestN = counts[t]; tie = false; }
+            else if (counts[t] === bestN) tie = true;
+        });
+        return (!best || tie) ? OTHER.c : toneStyle(best).c;
+    }
+
+    function pinIcon(g) {
+        var counts = toneCounts(g), n = g.vis.length;
+        var order = ['부정', '중립', '긍정'];
+        var segs = [], acc = 0;
+        order.concat(Object.keys(counts).filter(function (t) { return order.indexOf(t) === -1; })).forEach(function (t) {
+            if (!counts[t]) return;
+            var from = acc / n * 100; acc += counts[t]; var to = acc / n * 100;
+            segs.push(toneStyle(t).c + ' ' + from.toFixed(2) + '% ' + to.toFixed(2) + '%');
+        });
+        var bg = segs.length === 1 ? segs[0].split(' ')[0] : 'conic-gradient(' + segs.join(',') + ')';
+        var size = n === 1 ? 22 : Math.min(48, 28 + Math.round(6 * Math.sqrt(n)));
+        return L.divIcon({
+            className: 'toss-dot-wrap',
+            html: '<span class="toss-pin' + (g.active ? ' is-active' : '') + '" style="width:' + size + 'px;height:' + size + 'px;background:' + bg + '">' +
+                  (n > 1 ? '<b>' + n + '</b>' : '') + '</span>',
+            iconSize: [size, size], iconAnchor: [size / 2, size / 2]
+        });
+    }
+
+    function buildGroups() {
+        Object.keys(groups).forEach(function (t) {
+            if (map && groups[t].layer && map.hasLayer(groups[t].layer)) map.removeLayer(groups[t].layer);
+        });
+        groups = {};
+        DATA.forEach(function (it, i) {
+            var g = groups[it.target] || (groups[it.target] = { target: it.target, lat: it.lat, lon: it.lon, idxs: [], vis: [], active: false });
+            g.idxs.push(i);
+        });
+    }
+
+    function buildLayers() {
+        Object.keys(groups).forEach(function (t) {
+            var g = groups[t];
+            var pts = arc(BEIJING, [g.lat, g.lon]);
+            g.line = pts ? L.polyline(pts, { color: OTHER.c, weight: 2, opacity: 0.55, interactive: false }) : null;
+            g.vis = g.idxs.slice();
+            g.marker = L.marker([g.lat, g.lon], { icon: pinIcon(g), title: t })
+                .bindTooltip(t, { direction: 'top', offset: [0, -10] });
+            g.marker.on('click', function () { openTarget(t, false); });
+            g.layer = L.layerGroup(g.line ? [g.line, g.marker] : [g.marker]);
+        });
+    }
+
+    function updateGroup(g) {
+        if (!g.layer || !map) return;
+        if (!g.vis.length) { if (map.hasLayer(g.layer)) map.removeLayer(g.layer); return; }
+        if (!map.hasLayer(g.layer)) map.addLayer(g.layer);
+        var counts = toneCounts(g);
+        g.marker.setIcon(pinIcon(g));
+        g.marker.setTooltipContent(g.target + ' · ' + g.vis.length + '건');
+        if (g.line) g.line.setStyle({ color: dominantColor(counts, g.vis.length) });
+    }
+
+    // 필터 결과에 맞춰 지도 이동 (필터가 없으면 처음 화면으로)
+    var scheduleFit = debounce(function () {
+        if (!map) return;
+        if (!isFiltered()) { map.setView(CONFIG.center, CONFIG.zoom, { animate: true }); return; }
+        var pts = [];
+        Object.keys(groups).forEach(function (t) { if (groups[t].vis.length) pts.push([groups[t].lat, groups[t].lon]); });
+        if (!pts.length) return;
+        pts.push(BEIJING);
+        map.fitBounds(L.latLngBounds(pts), { padding: [60, 60], maxZoom: 5, animate: true });
+    }, 320);
+
+    // 시트가 가리는 만큼 지도 중심을 옮겨서 마커가 보이게 함
+    function focusLatLng(lat, lon, zoom, fly) {
+        if (!map) return;
+        var size = map.getSize();
+        var mobile = window.matchMedia('(max-width: 720px)').matches;
+        var pt = map.project([lat, lon], zoom);
+        pt = mobile ? pt.add([0, size.y * 0.26]) : pt.add([186, 0]);
+        var center = map.unproject(pt, zoom);
+        if (fly) map.flyTo(center, zoom, { duration: 0.7 }); else map.panTo(center, { animate: true });
+    }
+
+    // ---------------------------------------------------------
+    // 필터 적용
+    // ---------------------------------------------------------
+    function applyFilters(opts) {
+        opts = opts || {};
+        visible = []; visSet = {};
+        DATA.forEach(function (it, i) { if (matches(it)) { visible.push(i); visSet[i] = true; } });
+        Object.keys(groups).forEach(function (t) {
+            var g = groups[t];
+            g.vis = g.idxs.filter(function (i) { return visSet[i]; });
+            updateGroup(g);
+        });
+
+        var filtered = isFiltered();
+        var txt = filtered ? '전체 ' + DATA.length + '건 중 ' + visible.length + '건' : '전체 ' + DATA.length + '건';
+        if (skipped.length) txt += ' · 위치 미등록 ' + skipped.length + '곳 제외';
+        countEl.textContent = txt;
+        resetBtn.hidden = !filtered;
+
+        renderSheet();
+        syncEmpty();
+        writeHash();
+        if (opts.fit) scheduleFit();
+    }
+
+    function syncEmpty() {
+        var empty = $('empty-state');
+        if (!DATA.length) {
+            $('empty-msg').textContent = '불러온 사설이 없어요. 데이터 주소를 확인해 주세요.';
+            $('empty-reset').hidden = true;
+            empty.hidden = false;
+        } else if (!visible.length) {
+            $('empty-msg').textContent = '조건에 맞는 사설이 없어요';
+            $('empty-reset').hidden = false;
+            empty.hidden = false;
+        } else empty.hidden = true;
+    }
+
+    function resetAll() {
+        state = { tones: [], from: '', to: '', category: ALL, target: ALL, q: '' };
+        searchInput.value = '';
+        openKey = null;
+        render();
+        applyFilters({ fit: true });
+    }
+
+    // ---------------------------------------------------------
+    // 시트 (대상별 기사 / 검색 결과 목록)
+    // ---------------------------------------------------------
+    function cardHtml(i, listMode) {
+        var it = DATA[i], ts = toneStyle(it.tone);
+        return '<article class="tc' + (listMode ? ' is-link' : '') + (sheet.highlight === i ? ' is-hi' : '') + '" data-i="' + i + '"' +
+               (listMode ? ' role="button" tabindex="0"' : '') + '>' +
+               '<div class="tc-top">' +
+                   (it.tone ? '<span class="tc-tone" style="background:' + ts.bg + ';color:' + ts.c + '">' + esc(it.tone) + '</span>' : '') +
+                   '<span>' + esc(it.date) + '</span>' +
+                   (listMode ? '<span class="tc-route">중국 ➔ ' + esc(it.target) + '</span>' : '') +
+               '</div>' +
+               '<div class="tc-title">' + esc(it.title_kr) + '</div>' +
+               (it.title_cn ? '<div class="tc-cn">' + esc(it.title_cn) + '</div>' : '') +
+               ((it.url || it.blog_url) ?
+                   '<div class="tc-links">' +
+                       (it.url ? '<a class="tc-link" href="' + esc(it.url) + '" target="_blank" rel="noopener noreferrer">원문 보기</a>' : '') +
+                       (it.blog_url ? '<a class="tc-link" href="' + esc(it.blog_url) + '" target="_blank" rel="noopener noreferrer">블로그로 이동</a>' : '') +
+                   '</div>' : '') +
+               '</article>';
+    }
+
+    function toneBarHtml(idxs) {
+        if (!idxs.length) return '';
+        var c = {};
+        idxs.forEach(function (i) { var t = DATA[i].tone; c[t] = (c[t] || 0) + 1; });
+        var order = ['긍정', '중립', '부정'].concat(Object.keys(c).filter(function (t) { return TONES.indexOf(t) === -1; }));
+        var bar = '', legend = '';
+        order.forEach(function (t) {
+            if (!c[t]) return;
+            var col = toneStyle(t).c;
+            bar += '<span style="flex:' + c[t] + ';background:' + col + '"></span>';
+            legend += '<span><i style="background:' + col + '"></i>' + esc(t || '미분류') + ' ' + c[t] + '</span>';
+        });
+        return '<div class="bar">' + bar + '</div><div class="legend">' + legend + '</div>';
+    }
+
+    function renderSheet() {
+        var el = $('sheet');
+        if (!sheet.mode) { el.hidden = true; syncActive(); return; }
+
+        var idxs, title, sub, listMode = sheet.mode === 'list';
+        if (listMode) {
+            idxs = visible;
+            title = isFiltered() ? '검색 결과' : '전체 사설';
+            sub = idxs.length + '건';
+        } else {
+            var g = groups[sheet.target];
+            idxs = g ? g.vis : [];
+            if (!idxs.length) {           // 필터로 이 대상이 사라졌으면 목록/닫기로
+                sheet.mode = sheet.fromList ? 'list' : null;
+                sheet.fromList = false;
+                return renderSheet();
+            }
+            title = sheet.target;
+            sub = '중국 ➔ ' + sheet.target + ' · ' + idxs.length + '건';
+        }
+
+        $('sheet-title').textContent = title;
+        $('sheet-sub').textContent = sub;
+        $('sheet-back').hidden = !(sheet.mode === 'target' && sheet.fromList);
+        $('sheet-tones').innerHTML = toneBarHtml(idxs);
+        $('sheet-body').innerHTML = idxs.length
+            ? idxs.map(function (i) { return cardHtml(i, listMode); }).join('')
+            : '<div class="sheet-empty">조건에 맞는 사설이 없어요</div>';
+        el.hidden = false;
+        syncActive();
+    }
+
+    function syncActive() {
+        Object.keys(groups).forEach(function (t) {
+            var g = groups[t];
+            var active = sheet.mode === 'target' && sheet.target === t;
+            if (g.active !== active) {
+                g.active = active;
+                if (g.marker && g.vis.length) g.marker.setIcon(pinIcon(g));
+            }
+        });
+        listBtn.setAttribute('aria-pressed', sheet.mode === 'list' ? 'true' : 'false');
+        listBtn.textContent = sheet.mode === 'list' ? '목록 닫기' : '목록 보기';
+    }
+
+    function openTarget(t, fromList, highlight) {
+        var g = groups[t];
+        if (!g) return;
+        sheet = { mode: 'target', target: t, fromList: !!fromList, highlight: highlight === undefined ? -1 : highlight };
+        renderSheet();
+        $('sheet').classList.remove('is-expanded');
+        if (highlight !== undefined) {
+            var card = $('sheet-body').querySelector('.tc[data-i="' + highlight + '"]');
+            if (card && card.scrollIntoView) card.scrollIntoView({ block: 'nearest' });
+        }
+        if (map) focusLatLng(g.lat, g.lon, fromList ? Math.max(map.getZoom(), 4) : map.getZoom(), !!fromList);
+    }
+
+    function openList() {
+        sheet = { mode: 'list', target: null, fromList: false, highlight: -1 };
+        renderSheet();
+        $('sheet').classList.remove('is-expanded');
+    }
+
+    function closeSheet() {
+        if (!sheet.mode) return;
+        sheet = { mode: null, target: null, fromList: false, highlight: -1 };
+        renderSheet();
+    }
+
+    function onListPick(i) { openTarget(DATA[i].target, true, i); }
+
+    // ---------------------------------------------------------
+    // 주소(해시)로 필터 상태 저장 / 복원, 링크 복사
+    // ---------------------------------------------------------
+    function readHash() {
+        try {
+            var p = new URLSearchParams(location.hash.replace(/^#/, ''));
+            state.tones = (p.get('tone') || '').split(',').filter(function (t) { return TONES.indexOf(t) > -1; });
+            state.from = p.get('from') || '';
+            state.to = p.get('to') || '';
+            state.category = p.get('cat') || ALL;
+            state.target = p.get('target') || ALL;
+            state.q = p.get('q') || '';
+        } catch (e) {}
+    }
+
+    function writeHash() {
+        try {
+            var p = new URLSearchParams();
+            if (state.tones.length) p.set('tone', state.tones.join(','));
+            if (state.from) p.set('from', state.from);
+            if (state.to) p.set('to', state.to);
+            if (state.category !== ALL) p.set('cat', state.category);
+            if (state.target !== ALL) p.set('target', state.target);
+            if (state.q.trim()) p.set('q', state.q.trim());
+            var h = p.toString();
+            history.replaceState(null, '', location.pathname + location.search + (h ? '#' + h : ''));
+        } catch (e) {}
+    }
+
+    function toast(msg) {
+        var el = $('toast');
+        el.textContent = msg; el.hidden = false;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { el.hidden = true; }, 1800);
+    }
+
+    function copyLink() {
+        var url = location.href;
+        function fallback() {
+            var ta = document.createElement('textarea');
+            ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select();
+            var ok = false;
+            try { ok = document.execCommand('copy'); } catch (e) {}
+            document.body.removeChild(ta);
+            toast(ok ? '링크를 복사했어요' : '복사하지 못했어요. 주소창의 링크를 직접 복사해 주세요');
+        }
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(url).then(function () { toast('링크를 복사했어요'); }, fallback);
+        } else fallback();
+    }
+
+    // ---------------------------------------------------------
+    // 한국어 지명 라벨 (글자 없는 타일 위에 직접 그림)
+    //  - 줌 단계별로 보일 라벨을 고르고, 겹치면 우선순위가 높은 것만 남김
+    //  - 데이터에 있는 나라는 진하게, 우선순위도 높임
+    // ---------------------------------------------------------
+    var labelEntries = [];
+    var LABEL_MIN_ZOOM = { 1: 3, 2: 3, 3: 4, 4: 6 };
+
+    function labelIcon(l, isData) {
+        return L.divIcon({
+            className: 'kr-label kr-' + l.k + (isData ? ' is-data' : ''),
+            html: '<span' + (l.dy ? ' style="margin-top:' + l.dy + 'px"' : '') + '>' + esc(l.n) + '</span>',
+            iconSize: [0, 0]
+        });
+    }
+
+    function initLabels() {
+        var pane = map.createPane('krLabels');
+        pane.style.zIndex = 450;             // 연결선 위, 마커 아래
+        pane.style.pointerEvents = 'none';
+        labelEntries = KR_LABELS.map(function (l) {
+            return {
+                l: l, isData: false, rank: 0, on: false,
+                marker: L.marker([l.la, l.lo], { pane: 'krLabels', interactive: false, keyboard: false, icon: labelIcon(l, false) })
+            };
+        });
+        refreshLabelStyles();
+        map.on('zoomend moveend', layoutLabels);
+        layoutLabels();
+    }
+
+    function refreshLabelStyles() {
+        if (!labelEntries.length) return;
+        var present = {};
+        DATA.forEach(function (d) { present[d.target] = true; });
+        labelEntries.forEach(function (e) {
+            var isData = !!present[e.l.n] && e.l.k !== 'o';
+            if (isData !== e.isData) { e.isData = isData; e.marker.setIcon(labelIcon(e.l, isData)); }
+            var base = e.l.k === 'n' ? 0 : e.l.k === 'o' ? 1 : 1 + (e.l.p || 1);
+            e.rank = base - (isData ? 0.5 : 0);
+        });
+        labelEntries.sort(function (a, b) { return a.rank - b.rank; });
+    }
+
+    function layoutLabels() {
+        if (!map || !labelEntries.length) return;
+        var z = map.getZoom(), size = map.getSize(), placed = [];
+        labelEntries.forEach(function (e) {
+            var l = e.l, show = false, minZ, maxZ;
+            if (l.k === 'n') { minZ = 2; maxZ = 2; }
+            else if (l.k === 'o') { minZ = 2; maxZ = 4; }
+            else { minZ = LABEL_MIN_ZOOM[l.p] || 4; maxZ = 99; }
+            if (z >= minZ && z <= maxZ) {
+                var pt = map.latLngToContainerPoint([l.la, l.lo]);
+                if (pt.x > -80 && pt.x < size.x + 80 && pt.y > -30 && pt.y < size.y + 30) {
+                    var fs = l.k === 'n' ? 15 : 12;
+                    var w = l.n.length * fs * (l.k === 'n' || l.k === 'o' ? 1.35 : 0.98) + 10, h = fs + 8;
+                    var cy = pt.y + (l.dy || 0);
+                    var box = { x1: pt.x - w / 2, x2: pt.x + w / 2, y1: cy - h / 2, y2: cy + h / 2 };
+                    var hit = placed.some(function (b) {
+                        return box.x1 < b.x2 && box.x2 > b.x1 && box.y1 < b.y2 && box.y2 > b.y1;
+                    });
+                    if (!hit) { placed.push(box); show = true; }
+                }
+            }
+            if (show && !e.on) { map.addLayer(e.marker); e.on = true; }
+            if (!show && e.on) { map.removeLayer(e.marker); e.on = false; }
+        });
+    }
+
+    // ---------------------------------------------------------
+    // 이벤트 연결
+    // ---------------------------------------------------------
+    searchInput.addEventListener('input', function () {
+        state.q = searchInput.value;
+        applyFilters({ fit: true });
+    });
+    resetBtn.addEventListener('click', resetAll);
+    $('empty-reset').addEventListener('click', resetAll);
+    copyBtn.addEventListener('click', copyLink);
+    listBtn.addEventListener('click', function () { if (sheet.mode === 'list') closeSheet(); else openList(); });
+    $('sheet-close').addEventListener('click', closeSheet);
+    $('sheet-back').addEventListener('click', openList);
+    $('sheet-handle').addEventListener('click', function () { $('sheet').classList.toggle('is-expanded'); });
+    $('sheet-body').addEventListener('click', function (e) {
+        if (sheet.mode !== 'list' || e.target.closest('a')) return;
+        var card = e.target.closest('.tc[data-i]');
+        if (card) onListPick(+card.getAttribute('data-i'));
+    });
+    $('sheet-body').addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var card = e.target.closest && e.target.closest('.tc.is-link');
+        if (card) { e.preventDefault(); onListPick(+card.getAttribute('data-i')); }
+    });
+
+    document.addEventListener('pointerdown', function (e) { downInside = !!e.target.closest('.toss-dropdown'); });
+    document.addEventListener('click', function (e) {
+        if (!downInside && !e.target.closest('.toss-dropdown')) closeMenu();
+        downInside = false;
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        if (openKey !== null) closeMenu(); else closeSheet();
+    });
+    window.addEventListener('resize', closeMenu);
+    window.addEventListener('hashchange', function () {   // 같은 페이지에서 주소 #값만 바뀐 경우
+        readHash();
+        searchInput.value = state.q;
+        sanitizeState();
+        openKey = null;
+        render();
+        applyFilters({ fit: true });
+    });
+    filterBar.addEventListener('scroll', function () {   // 메뉴가 fixed라 직접 스크롤할 때만 닫음
+        if (Math.abs(filterBar.scrollLeft - lastScroll) > 2) { lastScroll = filterBar.scrollLeft; closeMenu(); }
+    });
+
+    // ---------------------------------------------------------
+    // 시작
+    // ---------------------------------------------------------
+    readHash();
+    searchInput.value = state.q;
+    setData(SNAPSHOT);       // 내장 데이터로 먼저 그림 (오프라인/file:// 에서도 동작)
+    fetchRemote(false);      // 이어서 최신 데이터로 교체
+    if (CONFIG.refreshMinutes > 0 && CONFIG.dataUrl) {
+        setInterval(function () { fetchRemote(true); }, CONFIG.refreshMinutes * 60000);
+    }
+
+    function init() {
+        map = findMap();
+        if (!map) {
+            countEl.textContent = '지도를 불러오지 못했어요. 새로고침해 주세요.';
+            return;
+        }
+        map.invalidateSize();
+        initLabels();
+        beijingMarker = L.marker(BEIJING, {
+            icon: L.divIcon({
+                className: 'toss-dot-wrap',
+                html: '<span class="toss-pin toss-pin--base" style="width:20px;height:20px"></span>',
+                iconSize: [20, 20], iconAnchor: [10, 10]
+            }),
+            zIndexOffset: 1000
+        }).bindTooltip('중국 베이징 (기준점)').addTo(map);
+        buildLayers();
+        applyFilters({ fit: isFiltered() });   // 주소로 필터가 넘어온 경우에만 처음부터 맞춰 이동
+        map.on('click', function () { closeMenu(); closeSheet(); });
+    }
+    // folium의 지도 생성 스크립트는 </body> 뒤에 있으므로 load 이후에 마커를 만든다
+    if (document.readyState === 'complete') init();
+    else window.addEventListener('load', init);
+})();
+</script>
+</body>
+<script>
+    
+    
+            var map_f752f6e3301254dd67b5b644275a4822 = L.map(
+                "map_f752f6e3301254dd67b5b644275a4822",
+                {
+                    center: [30.0, 100.0],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "maxBounds": [
+[
+-90,
+-180,
+],
+[
+90,
+180,
+],
+],
+  "zoom": 3,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_ee7073de0244afb596624fa27e5bb088 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}.png?key=cb1_3r5j_1_70e3eabfca0c860a9859be85",
+                {
+  "minZoom": 2,
+  "maxZoom": 10,
+  "maxNativeZoom": 10,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e, \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_ee7073de0244afb596624fa27e5bb088.addTo(map_f752f6e3301254dd67b5b644275a4822);
+        
+</script>
+</html>
